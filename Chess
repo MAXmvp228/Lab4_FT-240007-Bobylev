@@ -1,0 +1,130 @@
+def valid_pos(pos):
+  #Проверяет правильно ли введенна позиция фигуры
+  if (len(pos) == 2 and pos[0] in 'ABCDEFGHАВСНЕ' and pos[1] in '12345678'):
+    return True
+  else:
+    return False
+
+def chess_position_to_coords(pos):
+  #Преобразует шахматную позицию в координаты (x, y)
+  letter_to_num = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'А': 1, 'В': 2, 'С': 3, 'Е': 5, 'Н': 8}
+  x = letter_to_num[pos[0]]
+  y = int(pos[1])
+  return x, y
+
+def same_color(pos1, pos2):
+  #Проверяет, одного ли цвета клетки
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  return (y1 + y2) % 2 == (x2 + x1) % 2
+
+def queen_threat(pos1, pos2):
+    #Проверяет угрозу ферзя
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  return (x1 == x2 or y1 == y2 or abs(x1 - x2) == abs(y1 - y2))
+
+def rook_threat(pos1, pos2):
+    #Проверяет угрозу ладьи
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  return (x1 == x2 or y1 == y2)
+
+def bishop_threat(pos1, pos2):
+    #Проверяет угрозу слона
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  return abs(x1 - x2) == abs(y1 - y2)
+
+def knight_threat(pos1, pos2):
+    #Проверяет угрозу коня
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  dx = abs(x1 - x2)
+  dy = abs(y1 - y2)
+  return (dx == 1 and dy == 2) or (dx == 2 and dy == 1)
+
+def find_intermediate_move(figure, pos1, pos2):
+    #Находит промежуточный ход для создания угрозы
+
+  if (figure=="ферзь" or figure == "ладья"):
+    intermediate_pos = f'{pos1[0]}{pos2[1]}'
+    return intermediate_pos
+  elif figure == "слон":
+    if same_color(pos1,pos2):
+      return enumeration_positions(pos1, pos2)
+  elif figure == "конь":
+    return enumeration_positions(pos1, pos2)
+
+  return None
+
+def enumeration_positions(pos1, pos2):
+    # Перебираем все возможные клетки доски
+  x1, y1 = chess_position_to_coords(pos1)
+  x2, y2 = chess_position_to_coords(pos2)
+  num_to_letter = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F', 7: 'G', 8: 'H', 'А': 1, 'В': 2, 'С': 3, 'Е': 5, 'Н': 8}
+  for x in range(1, 9):
+    for y in range(1, 9):
+      intermediate_pos = f"{num_to_letter[x]}{y}"
+
+            # Пропускаем исходную и целевую позиции
+      if intermediate_pos == pos1 or intermediate_pos == pos2:
+        continue
+
+            # Проверяем, можно ли попасть на промежуточную клетку и угрожать оттуда
+      if figure == "слон":
+        if bishop_threat(pos1, intermediate_pos) and bishop_threat(intermediate_pos, pos2):
+          return intermediate_pos
+      elif figure == "конь":
+        if knight_threat(pos1, intermediate_pos) and knight_threat(intermediate_pos, pos2):
+          return intermediate_pos
+
+  return None
+
+# Ввод данных
+pos1 = input("Введите адрес Клетки №1 (например, В7): ")
+pos2 = input("Введите адрес Клетки №2 (например, Е5): ")
+figure = input("Введите фигуру (ферзь, ладья, слон, конь): ")
+
+# Проверка корректности ввода
+while not(valid_pos(pos1)):
+  print("Данные для Клетки №1 введенны не правильно")
+  pos1 = input("Введите адрес Клетки №1 (например, В7): ")
+while not(valid_pos(pos2)):
+  print("Данные для Клетки №2 введенны не правильно")
+  pos2 = input("Введите адрес Клетки №2 (например, Е5): ")
+
+while not(figure in ["ферзь", "ладья", "слон", "конь"]):
+  print("Наименование фигуры введенно не правильно")
+  figure = input("Введите фигуру (ферзь, ладья, слон, конь): ")
+
+    # 1. Проверка цвета клеток
+if same_color(pos1, pos2):
+  print("1. Клетки одного цвета")
+else:
+  print("1. Клетки разного цвета")
+
+    # 2. Проверка угрозы
+threat_exists = False
+if figure == "ферзь":
+  threat_exists = queen_threat(pos1, pos2)
+elif figure == "ладья":
+  threat_exists = rook_threat(pos1, pos2)
+elif figure == "слон":
+  threat_exists = bishop_threat(pos1, pos2)
+elif figure == "конь":
+  threat_exists = knight_threat(pos1, pos2)
+
+if threat_exists:
+  print(f"2. {figure.capitalize()} угрожает фигуре в клетке {pos2}")
+else:
+  print(f"2. {figure.capitalize()} НЕ угрожает фигуре в клетке {pos2}")
+
+    # 3. Поиск промежуточного хода
+  print("3. Поиск промежуточного хода:")
+
+  intermediate = find_intermediate_move(figure, pos1, pos2)
+  if intermediate:
+    print(f"Можно создать угрозу, переместившись на клетку {intermediate}")
+  else:
+    print("Невозможно создать угрозу за один ход")
