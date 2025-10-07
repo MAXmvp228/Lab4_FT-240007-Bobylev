@@ -98,6 +98,26 @@ while not(figure in ["ферзь", "ладья", "слон", "конь"]):
   print("Наименование фигуры введенно не правильно")
   figure = input("Введите фигуру (ферзь, ладья, слон, конь): ")
 
+#Вывод шахматной доски с выбраными клетками
+x1, y1 = chess_position_to_coords(pos1)
+x2, y2 = chess_position_to_coords(pos2)
+print("  Шахматная доска")
+print("  A  B  C  D  E  F  G  H")
+for row in range(8, 0, -1):
+  print(row, end=" ")
+  for col in range(8):
+    if (col==x1-1 and row==y1):
+      print("№1", end=" ")
+    elif (col==x2-1 and row==y2):
+      print("№2", end=" ")
+    else:
+      if (row + col) % 2 == 0:
+        print("□", end="  ")  # Белая клетка
+      else:
+        print("■", end="  ")  # Чёрная клетка
+  print(row)
+print("  A  B  C  D  E  F  G  H")
+
     # 1. Проверка цвета клеток
 if same_color(pos1, pos2):
   print("1. Клетки одного цвета")
