@@ -15,18 +15,19 @@
 2. Создать закрытый git-репозиторий с доступом для KOlesya1. В процессе написания, отладки и улучшения программы используйте git для фиксации изменений. Сопровождайте коммиты понятными комментариями о том, что было сделано.
 
 3. Протестировать написанный код для комбинации, приведенной на Рисунке 1, с адресами клеток В7, Е5 и с заданной фигурой «Конь» и ещё минимум для 2-х произвольных комбинаций (всего не менее 3-х тестов).
+4.  Отобразить доску и отметить на ней выбранные поля.
 
 
 Результаты тестирования
 
 Тест 1
 
-<img width="408" height="141" alt="image" src="https://github.com/user-attachments/assets/a540c198-4444-4cde-a6c5-f6ef531d749c" />
+<img width="416" height="351" alt="image" src="https://github.com/user-attachments/assets/df6be953-a8c9-4e5a-8613-e743d749ec48" />
 
 Тест 2
 
-<img width="428" height="256" alt="image" src="https://github.com/user-attachments/assets/b56eb7a7-ff21-4a13-9c17-28abb9f386b1" />
+<img width="467" height="429" alt="image" src="https://github.com/user-attachments/assets/e998350a-31c4-4e7c-9459-4488399cd6f8" />
 
 Тест 3
 
-<img width="415" height="107" alt="image" src="https://github.com/user-attachments/assets/45bec35e-f634-4773-a5c4-e5f066859da3" />
+<img width="422" height="309" alt="image" src="https://github.com/user-attachments/assets/1abdda9a-792c-4c2d-a1a2-fa0e617ec7ee" />
